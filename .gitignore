@@ -1,0 +1,12 @@
+data/
+*.h5
+*.tar.xz
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+checkpoints/
+*.ckpt
+*.pth
+wandb/
+.env
