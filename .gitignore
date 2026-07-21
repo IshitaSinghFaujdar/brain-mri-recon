@@ -1,12 +1,23 @@
+# Dataset (archives + extracted volumes)
 data/
 *.h5
 *.tar.xz
+*.tar.gz
+download.log
+
+# Python / tooling
 .venv/
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
+
+# Training artifacts
 checkpoints/
 *.ckpt
 *.pth
 wandb/
+runs/
+outputs/
+
+# Secrets / local env
 .env
