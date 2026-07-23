@@ -9,6 +9,21 @@ dependencies = [
     "h5py>=3.16.0",
     "jupyter>=1.1.1",
     "matplotlib>=3.10.9",
+    "medpy>=0.5.2",
     "numpy>=2.2.6",
-    "torchvision>=0.28.0",
+    "pygrappa>=0.26.3",
+    "scikit-image>=0.25.2",
+    "torch>=2.11.0",
+    "torchvision>=0.26.0",
 ]
+
+# Pin PyTorch to CUDA 12.8 wheels so uv sync works on drivers like 570 / CUDA 12.8
+# (default PyPI can resolve to cu130, which fails on this server).
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu128" }
+torchvision = { index = "pytorch-cu128" }
