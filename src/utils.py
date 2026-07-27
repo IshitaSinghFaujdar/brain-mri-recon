@@ -111,19 +111,35 @@ def Grappa_recon(kspace,start, end):
 
 
 
-def comp_sub_kspace(subk,crop_size):
-    #print('img:', subk.shape)
-    processed_subk=np.zeros(crop_size)
-    s=subk.shape
-    processed_subk[:,0:s[1],0:s[2]]=subk
-    return processed_subk
+def center_crop_spatial(x, target_h, target_w):
+    """Center-crop (... , H, W) if larger than target; leave smaller dims unchanged."""
+    h, w = x.shape[-2:]
+    if h > target_h:
+        y0 = (h - target_h) // 2
+        x = x[..., y0:y0 + target_h, :]
+    if w > target_w:
+        x0 = (w - target_w) // 2
+        x = x[..., :, x0:x0 + target_w]
+    return x
+
+
+def _fit_to_crop(src, crop_shape):
+    """Pad (if smaller) or center-crop (if larger) so src fits crop_shape exactly."""
+    out = np.zeros(crop_shape, dtype=np.asarray(src).dtype)
+    src = center_crop_spatial(src, crop_shape[-2], crop_shape[-1])
+    c = min(src.shape[0], crop_shape[0])
+    h = min(src.shape[-2], crop_shape[-2])
+    w = min(src.shape[-1], crop_shape[-1])
+    out[:c, :h, :w] = src[:c, :h, :w]
+    return out
+
+
+def comp_sub_kspace(subk, crop_size):
+    return _fit_to_crop(subk, crop_size)
+
 
 def comp_img(img, crop_size_2):
-    #print('img:', img.shape)
-    processed_img=np.zeros((crop_size_2))
-    s=img.shape
-    processed_img[:,0:s[1],0:s[2]]=img
-    return processed_img
+    return _fit_to_crop(img, crop_size_2)
 
 def apply_kernel_weight(
         kspace,

@@ -21,3 +21,7 @@ outputs/
 
 # Secrets / local env
 .env
+
+# Local Jupyter URL (contains token)
+.jupyter_server_url
+
